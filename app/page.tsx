@@ -16,7 +16,9 @@ const Steps = dynamic(() => import("@/components/sections/Steps").then((mod) => 
 const AreaSwitcher = dynamic(() => import("@/components/sections/AreaSwitcher").then((mod) => mod.AreaSwitcher));
 const Reviews = dynamic(() => import("@/components/sections/Reviews").then((mod) => mod.Reviews));
 const MetricsStrip = dynamic(() => import("@/components/sections/MetricsStrip").then((mod) => mod.MetricsStrip));
-const QuoteForm = dynamic(() => import("@/components/sections/QuoteForm").then((mod) => mod.QuoteForm));
+const ContactQuoteForm = dynamic(() =>
+  import("@/components/sections/ContactQuoteForm").then((mod) => mod.ContactQuoteForm),
+);
 
 export const metadata = createPageMetadata({
   title: "Verhuisbedrijf Friesland voor een zorgeloze verhuisdag",
@@ -54,7 +56,7 @@ export default function HomePage() {
       <Hero />
       <MovingGallery />
       <HomeHighlights />
-      <QuoteForm />
+      <ContactQuoteForm />
       <MetricsStrip />
       <Benefits />
       <LocalProof

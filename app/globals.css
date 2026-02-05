@@ -155,9 +155,3 @@ main {
     transition: none !important;
   }
 }
-
-@media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
-  body {
-    background-attachment: fixed, fixed, fixed, fixed;
-  }
-}
