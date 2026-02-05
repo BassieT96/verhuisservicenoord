@@ -1,9 +1,10 @@
 .hero {
   background:
-    linear-gradient(180deg, rgba(31, 58, 95, 0.54) 0%, rgba(31, 58, 95, 0.74) 74%),
-    radial-gradient(860px 320px at 84% 4%, rgba(245, 158, 11, 0.3), transparent 68%),
-    radial-gradient(720px 300px at 6% 10%, rgba(251, 191, 36, 0.2), transparent 70%),
-    url("/images/verhuis_afbeelding_001.png") center 26% / 76% auto no-repeat,
+    linear-gradient(180deg, rgba(31, 58, 95, 0.5) 0%, rgba(31, 58, 95, 0.7) 74%),
+    radial-gradient(900px 360px at 86% 2%, rgba(245, 158, 11, 0.34), transparent 68%),
+    radial-gradient(760px 320px at 4% 8%, rgba(251, 191, 36, 0.23), transparent 70%),
+    radial-gradient(800px 300px at 52% 102%, rgba(245, 158, 11, 0.16), transparent 70%),
+    url("/images/verhuis_afbeelding_001.png") center 24% / 72% auto no-repeat,
     radial-gradient(940px 340px at 20% 0%, rgba(31, 58, 95, 0.1), transparent 65%),
     radial-gradient(640px 300px at 86% 0%, rgba(245, 158, 11, 0.18), transparent 68%),
     var(--color-bg);
@@ -1304,7 +1305,7 @@
 
 @media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
   .hero {
-    background-attachment: scroll, scroll, scroll, fixed, scroll, scroll, scroll;
+    background-attachment: scroll, scroll, scroll, scroll, fixed, scroll, scroll, scroll;
   }
 }
 

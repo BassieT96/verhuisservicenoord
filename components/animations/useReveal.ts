@@ -10,7 +10,7 @@ type RevealOptions = {
 };
 
 export function useReveal(options: RevealOptions = {}) {
-  const { rootMargin = "0px 0px -10% 0px", threshold = 0.2, once = true } = options;
+  const { rootMargin = "0px 0px -8% 0px", threshold = 0.14, once = true } = options;
   const ref = useRef<HTMLElement | null>(null);
   const reducedMotion = useReducedMotionPreference();
   const [revealed, setRevealed] = useState(false);

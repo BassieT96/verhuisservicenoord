@@ -46,10 +46,10 @@ html {
 
 body {
   background:
-    radial-gradient(960px 420px at -12% -14%, rgba(245, 158, 11, 0.22), transparent 58%),
-    radial-gradient(920px 420px at 110% -8%, rgba(31, 58, 95, 0.18), transparent 62%),
-    radial-gradient(880px 360px at 55% 104%, rgba(251, 191, 36, 0.17), transparent 65%),
-    linear-gradient(180deg, #fffaf2 0%, #f7f8fb 38%, #f3f5fa 68%, #eef2f8 100%);
+    radial-gradient(1020px 460px at -12% -16%, rgba(245, 158, 11, 0.28), transparent 58%),
+    radial-gradient(920px 430px at 112% -8%, rgba(31, 58, 95, 0.2), transparent 62%),
+    radial-gradient(860px 380px at 56% 102%, rgba(251, 191, 36, 0.2), transparent 66%),
+    linear-gradient(180deg, #fff9f0 0%, #f8f8fa 40%, #f2f6fb 72%, #ecf2fa 100%);
   color: var(--color-text-secondary);
   font-family: var(--font-main), "Inter", "Segoe UI", sans-serif;
   font-size: clamp(16px, 1.35vw, 18px);
@@ -153,5 +153,11 @@ main {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+
+@media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
+  body {
+    background-attachment: fixed, fixed, fixed, fixed;
   }
 }

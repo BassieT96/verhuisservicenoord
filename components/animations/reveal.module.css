@@ -1,11 +1,12 @@
 .reveal {
   opacity: 0;
-  transform: translateY(12px);
-  filter: blur(6px);
+  transform: translateY(20px) scale(0.985);
+  filter: blur(8px);
   transition:
-    opacity 0.6s var(--ease-out-quint),
-    transform 0.6s var(--ease-out-quint),
-    filter 0.6s var(--ease-out-quint);
+    opacity 0.72s var(--ease-out-quint),
+    transform 0.72s var(--ease-out-quint),
+    filter 0.72s var(--ease-out-quint);
+  will-change: opacity, transform, filter;
 }
 
 .revealVisible {
