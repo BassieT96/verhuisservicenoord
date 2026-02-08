@@ -131,6 +131,8 @@ export function ContactQuoteForm() {
   const [state, setState] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const hasErrors = useMemo(() => Object.keys(errors).length > 0, [errors]);
 
@@ -142,9 +144,10 @@ export function ContactQuoteForm() {
       return next;
     });
     setSubmitted(false);
+    setSubmitError("");
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validate(state);
     setErrors(nextErrors);
@@ -153,8 +156,33 @@ export function ContactQuoteForm() {
       return;
     }
 
-    setSubmitted(true);
-    setState(initialState);
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/offerte", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state),
+      });
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as { message?: string } | null;
+        throw new Error(result?.message || "Verzenden is niet gelukt.");
+      }
+
+      setSubmitted(true);
+      setState(initialState);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Verzenden is niet gelukt. Probeer het opnieuw of bel direct 0612345678.";
+      setSubmitError(message);
+      setSubmitted(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -174,6 +202,12 @@ export function ContactQuoteForm() {
               {hasErrors ? (
                 <p className={`${sectionStyles.feedback} ${sectionStyles.feedbackError} ${sectionStyles.full}`} role="alert">
                   Er ontbreken nog enkele gegevens. Controleer de gemarkeerde velden.
+                </p>
+              ) : null}
+
+              {submitError ? (
+                <p className={`${sectionStyles.feedback} ${sectionStyles.feedbackError} ${sectionStyles.full}`} role="alert">
+                  {submitError}
                 </p>
               ) : null}
 
@@ -486,7 +520,9 @@ export function ContactQuoteForm() {
               </div>
 
               <div className={sectionStyles.full}>
-                <ButtonNative type="submit">Verstuur aanvraag</ButtonNative>
+                <ButtonNative type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Bezig met verzenden..." : "Verstuur aanvraag"}
+                </ButtonNative>
               </div>
             </form>
           </Card>
