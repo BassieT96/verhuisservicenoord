@@ -25,6 +25,7 @@ const headerNavigation = [
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const servicePaths = ["/verhuisdiensten", "/zakelijk-verhuizen", "/seniorenverhuizing", "/spoedverhuizing"];
   const servicesActive = servicePaths.includes(pathname);
 
@@ -34,6 +35,18 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   const headerClass = `${styles.header} ${scrolled ? styles.headerScrolled : ""}`.trim();
 
@@ -93,6 +106,77 @@ export function Header() {
             dataTrackLabel="offerte"
             dataTrackLocation="header"
           >
+            Vrijblijvende offerte
+          </ButtonLink>
+        </div>
+
+        <button
+          type="button"
+          className={styles.menuButton}
+          aria-label={menuOpen ? "Sluit menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+
+      <div
+        className={`${styles.mobileMenuBackdrop} ${menuOpen ? styles.mobileMenuBackdropOpen : ""}`.trim()}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+
+      <div id="mobile-menu" className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ""}`.trim()}>
+        <div className={styles.mobileMenuHeader}>
+          <span>Menu</span>
+          <button type="button" className={styles.menuClose} onClick={() => setMenuOpen(false)}>
+            Sluiten
+          </button>
+        </div>
+
+        <nav className={styles.mobileMenuNav} aria-label="Mobiel menu">
+          {headerNavigation.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={active ? styles.mobileMenuActive : undefined}
+                onClick={() => setMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+
+          <div className={styles.mobileMenuGroup}>
+            <span className={styles.mobileMenuLabel}>Diensten</span>
+            {serviceMenuItems.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={active ? styles.mobileMenuActive : undefined}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+
+        <div className={styles.mobileMenuActions}>
+          <ButtonExternal href={siteConfig.phoneHref} variant="secondary" dataTrackEvent="header_click" dataTrackLabel="bel_direct" dataTrackLocation="mobile_menu">
+            <PhoneIcon width={18} height={18} />
+            Bel direct
+          </ButtonExternal>
+          <ButtonLink href="/contact#offerte" dataTrackEvent="header_click" dataTrackLabel="offerte" dataTrackLocation="mobile_menu">
             Vrijblijvende offerte
           </ButtonLink>
         </div>

@@ -21,6 +21,7 @@ export function MobileBar() {
         variant="secondary"
         dataTrackEvent="mobile_bar_click"
         dataTrackLabel="whatsapp"
+        className={styles.mobileBarOptional}
       >
         <MessageCircleIcon width={18} height={18} />
         WhatsApp

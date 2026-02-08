@@ -1,5 +1,5 @@
 import { ButtonExternal, ButtonLink } from "@/components/ui/Button";
-import { BoxIcon, FileTextIcon, MessageCircleIcon, PhoneIcon, RouteIcon, ShieldIcon } from "@/components/ui/icons";
+import { BoxIcon, FileTextIcon, MessageCircleIcon, PhoneIcon, RouteIcon, ShieldIcon, TruckIcon } from "@/components/ui/icons";
 import { siteConfig } from "@/lib/site";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
@@ -45,6 +45,7 @@ export function Hero({
                 target="_blank"
                 rel="noreferrer"
                 variant="secondary"
+                className={styles.heroCtaOptional}
                 dataTrackEvent="hero_click"
                 dataTrackLabel="whatsapp"
                 dataTrackLocation="hero"
@@ -67,12 +68,14 @@ export function Hero({
           <div className={styles.heroVisual}>
             <div className={styles.routeGraphic}>
               <div className={styles.routeTop}>
-                <span>Leeuwarden</span>
-                <span>Harlingen</span>
+                <span>Ophalen</span>
+                <span>Opleveren</span>
               </div>
               <div className={styles.routeBackdrop} aria-hidden="true" />
               <div className={styles.routeLine} />
-              <span className={styles.routeDrop} aria-hidden="true" />
+              <span className={styles.routeDrop} aria-hidden="true">
+                <TruckIcon width={16} height={16} />
+              </span>
               <span className={`${styles.routeNode} ${styles.routeNodeStart}`}>
                 <span className={`${styles.rippleRing} ${styles.rippleRingOne}`} />
                 <span className={`${styles.rippleRing} ${styles.rippleRingOneAlt}`} />

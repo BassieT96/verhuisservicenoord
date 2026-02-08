@@ -13,19 +13,19 @@ const galleryItems = [
     title: "Zorgvuldig inpakken",
     text: "Professionele handling van meubels en kwetsbare spullen.",
     image:
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80",
+      "/images/ChatGPT%20Image%20Feb%205,%202026%20at%2008_28_11%20PM.png",
   },
   {
     title: "Efficient transport",
     text: "Slimme planning in heel Friesland met vaste teams.",
     image:
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80",
+      "/images/ChatGPT%20Image%20Feb%205,%202026%20at%2008_28_15%20PM.png",
   },
   {
     title: "Nette oplevering",
     text: "Alles op de juiste plek, met een duidelijke eindcheck.",
     image:
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+      "/images/ChatGPT%20Image%20Feb%205,%202026%20at%2008_28_17%20PM.png",
   },
 ] as const;
 

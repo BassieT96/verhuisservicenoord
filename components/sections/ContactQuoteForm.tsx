@@ -486,7 +486,7 @@ export function ContactQuoteForm() {
               </div>
 
               <div className={sectionStyles.full}>
-                <ButtonNative type="submit">Vrijblijvende offerte</ButtonNative>
+                <ButtonNative type="submit">Verstuur aanvraag</ButtonNative>
               </div>
             </form>
           </Card>

@@ -101,3 +101,14 @@ export function BuildingIcon(props: IconProps) {
     </BaseIcon>
   );
 }
+
+export function TruckIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M2 8h11v7H2z" />
+      <path d="M13 11h4.5l2.5 2.5V15h-7v-4Z" />
+      <circle cx="6.5" cy="17" r="2" />
+      <circle cx="18" cy="17" r="2" />
+    </BaseIcon>
+  );
+}

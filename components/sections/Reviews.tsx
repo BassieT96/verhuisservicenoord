@@ -59,8 +59,8 @@ export function Reviews() {
               <strong>Gemiddeld beoordeeld met 9.4</strong>
               <span>Gebaseerd op recente verhuizingen in Friesland</span>
             </div>
-            <span className={styles.reviewRating} aria-label="Vijf hartjes beoordeling">
-              ♡♡♡♡♡
+            <span className={styles.reviewRating} aria-label="Vijf sterren beoordeling">
+              ☆☆☆☆☆
             </span>
           </div>
 
