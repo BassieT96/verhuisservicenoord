@@ -7,34 +7,34 @@ import layoutStyles from "@/components/layout/layout.module.css";
 const benefits = [
   {
     title: "Regionale ervaring",
-    text: "Onze planners kennen de routes, laadplekken en timing in Friesland tot in detail.",
+    text: "Onze planners kennen routes, laadplekken en timing in Friesland.",
     backTitle: "Wat merkt u daarvan?",
     backText:
-      "Minder verrassingen op de verhuisdag, realistische tijdvakken en een team dat meteen weet hoe het op locatie werkt.",
+      "U krijgt realistische tijdvakken en minder verrassingen op de verhuisdag.",
     icon: RouteIcon,
   },
   {
     title: "Verzekerd vervoer",
-    text: "Uw inboedel wordt zorgvuldig behandeld en professioneel beschermd tijdens transport.",
+    text: "Uw inboedel wordt zorgvuldig behandeld en beschermd tijdens transport.",
     backTitle: "Extra zekerheid",
     backText:
-      "Van kwetsbare stukken tot grote meubels: alles wordt veilig verpakt, vervoerd en gecontroleerd opgeleverd.",
+      "Van kwetsbare stukken tot grote meubels: alles wordt veilig verpakt en opgeleverd.",
     icon: ShieldIcon,
   },
   {
     title: "Strakke planning",
-    text: "U ontvangt vooraf een heldere planning met vaste contactpersoon en duidelijke tijden.",
+    text: "U ontvangt vooraf een heldere planning met vaste contactpersoon.",
     backTitle: "Rust in uw hoofd",
     backText:
-      "U weet vooraf wie er komt, wanneer we starten en hoe de dag verloopt. Dat geeft overzicht en vertrouwen.",
+      "U weet vooraf wie er komt en hoe de dag verloopt. Dat geeft overzicht.",
     icon: ClockIcon,
   },
   {
     title: "Volledige ontzorging",
-    text: "Van inpakken en demontage tot plaatsing op locatie: wij regelen het complete traject.",
+    text: "Van inpakken tot plaatsing op locatie: wij regelen het complete traject.",
     backTitle: "Alles geregeld",
     backText:
-      "Wij nemen het zware en praktische werk uit handen, zodat u zich kunt richten op uw nieuwe plek.",
+      "Wij nemen het praktische werk uit handen, zodat u zich focust op uw nieuwe plek.",
     icon: BoxIcon,
   },
 ] as const;

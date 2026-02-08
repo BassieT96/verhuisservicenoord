@@ -546,10 +546,10 @@
 
 .flipCard {
   border-radius: 16px;
-  -webkit-perspective: 1200px;
+  min-height: clamp(220px, 16vw, 260px);
   height: auto;
   outline: none;
-  perspective: 1200px;
+  position: relative;
 }
 
 .flipCard:focus-visible {
@@ -557,30 +557,24 @@
 }
 
 .flipCardInner {
-  height: clamp(250px, 22vw, 320px);
-  min-height: 250px;
+  height: clamp(220px, 16vw, 260px);
+  min-height: 220px;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.7s var(--ease-out-quint);
-}
-
-.benefitCard:hover .flipCardInner,
-.flipCard:focus-visible .flipCardInner,
-.flipCard:focus .flipCardInner,
-.flipCard:active .flipCardInner {
-  transform: rotateY(180deg);
 }
 
 .flipCardFront,
 .flipCardBack {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   gap: 12px;
   height: 100%;
+  inset: 0;
   justify-content: flex-start;
   overflow: hidden;
+  position: absolute;
+  transition:
+    opacity 0.35s var(--ease-out-quint),
+    transform 0.35s var(--ease-out-quint);
 }
 
 .flipCardBack {
@@ -588,9 +582,33 @@
     linear-gradient(160deg, rgba(31, 58, 95, 0.92), rgba(31, 58, 95, 0.84) 62%),
     linear-gradient(180deg, rgba(31, 58, 95, 0.9), rgba(31, 58, 95, 0.95));
   color: #ffffff;
-  inset: 0;
-  position: absolute;
-  transform: rotateY(180deg);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  z-index: 1;
+}
+
+.flipCardFront {
+  opacity: 1;
+  transform: translateY(0);
+  z-index: 2;
+}
+
+.benefitCard:hover .flipCardFront,
+.flipCard:focus-visible .flipCardFront,
+.flipCard:focus .flipCardFront,
+.flipCard:active .flipCardFront {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.benefitCard:hover .flipCardBack,
+.flipCard:focus-visible .flipCardBack,
+.flipCard:focus .flipCardBack,
+.flipCard:active .flipCardBack {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .flipCardBack h3,
@@ -1445,8 +1463,8 @@
   }
 
   .flipCardInner {
-    height: 240px;
-    min-height: 240px;
+    height: 210px;
+    min-height: 210px;
   }
 
   .metrics {

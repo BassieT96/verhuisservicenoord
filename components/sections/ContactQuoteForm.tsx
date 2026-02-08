@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import layoutStyles from "@/components/layout/layout.module.css";
 import sectionStyles from "@/components/sections/sections.module.css";
 import uiStyles from "@/components/ui/ui.module.css";
+import { submitViaFormSubmitBrowser } from "@/lib/formsubmit";
 import { siteConfig } from "@/lib/site";
 
 type ServiceType = "particulier" | "zakelijk" | "senioren" | "spoed";
@@ -168,7 +169,18 @@ export function ContactQuoteForm() {
 
       if (!response.ok) {
         const result = (await response.json().catch(() => null)) as { message?: string } | null;
-        throw new Error(result?.message || "Verzenden is niet gelukt.");
+        const fallbackResult = await submitViaFormSubmitBrowser(state);
+        if (fallbackResult.ok) {
+          setSubmitted(true);
+          setState(initialState);
+          return;
+        }
+
+        throw new Error(
+          fallbackResult.message ||
+            result?.message ||
+            "Verzenden is niet gelukt.",
+        );
       }
 
       setSubmitted(true);
