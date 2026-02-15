@@ -446,7 +446,7 @@
 }
 
 .benefitGrid {
-  align-items: start;
+  align-items: stretch;
 }
 
 .featureGrid {
@@ -527,12 +527,12 @@
 
 .benefitCard,
 .serviceCard {
-  display: flex;
   grid-column: span 3;
 }
 
 .benefitCard {
   align-self: start;
+  min-width: 0;
 }
 
 .benefitCard > article,
@@ -546,10 +546,11 @@
 
 .flipCard {
   border-radius: 16px;
-  min-height: clamp(220px, 16vw, 260px);
-  height: auto;
+  display: block;
+  height: clamp(208px, 15vw, 236px);
   outline: none;
   position: relative;
+  width: 100%;
 }
 
 .flipCard:focus-visible {
@@ -557,24 +558,28 @@
 }
 
 .flipCardInner {
-  height: clamp(220px, 16vw, 260px);
-  min-height: 220px;
+  display: grid;
+  height: 100%;
+  isolation: isolate;
   position: relative;
+  width: 100%;
 }
 
 .flipCardFront,
 .flipCardBack {
+  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  grid-area: 1 / 1;
   height: 100%;
-  inset: 0;
   justify-content: flex-start;
   overflow: hidden;
-  position: absolute;
+  position: relative;
   transition:
     opacity 0.35s var(--ease-out-quint),
     transform 0.35s var(--ease-out-quint);
+  width: 100%;
 }
 
 .flipCardBack {
@@ -594,18 +599,16 @@
   z-index: 2;
 }
 
-.benefitCard:hover .flipCardFront,
+.flipCard:hover .flipCardFront,
 .flipCard:focus-visible .flipCardFront,
-.flipCard:focus .flipCardFront,
-.flipCard:active .flipCardFront {
+.flipCard:focus-within .flipCardFront {
   opacity: 0;
   transform: translateY(-8px);
 }
 
-.benefitCard:hover .flipCardBack,
+.flipCard:hover .flipCardBack,
 .flipCard:focus-visible .flipCardBack,
-.flipCard:focus .flipCardBack,
-.flipCard:active .flipCardBack {
+.flipCard:focus-within .flipCardBack {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -625,11 +628,11 @@
 }
 
 .flipCardFront p {
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
 }
 
 .flipCardBack p {
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
 }
 
 .benefitCard h3,
@@ -1462,9 +1465,8 @@
     grid-column: span 4;
   }
 
-  .flipCardInner {
-    height: 210px;
-    min-height: 210px;
+  .flipCard {
+    height: 220px;
   }
 
   .metrics {
