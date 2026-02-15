@@ -4,28 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
 import { useReducedMotionPreference } from "@/components/animations/useReducedMotionPreference";
+import type { CmsMetricItem } from "@/sanity/lib/content";
 
-type Metric = {
-  value: number;
-  suffix?: string;
-  label: string;
+type MetricsStripProps = {
+  items: CmsMetricItem[];
 };
 
-const metrics: Metric[] = [
-  { value: 1500, suffix: "+", label: "Verhuizingen uitgevoerd" },
-  { value: 15, suffix: "+", label: "Jaar ervaring in Friesland" },
-  { value: 94, suffix: "%", label: "Klanten die ons aanbevelen" },
-];
-
-function formatMetric(metric: Metric, current: number) {
+function formatMetric(metric: CmsMetricItem, current: number) {
   if (metric.suffix === "%") return `${current}${metric.suffix}`;
   return `${current}${metric.suffix ?? ""}`;
 }
 
-export function MetricsStrip() {
+export function MetricsStrip({ items }: MetricsStripProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(false);
-  const [values, setValues] = useState<number[]>(metrics.map(() => 0));
+  const [values, setValues] = useState<number[]>(items.map(() => 0));
   const reduceMotion = useReducedMotionPreference();
 
   useEffect(() => {
@@ -51,7 +44,7 @@ export function MetricsStrip() {
 
     if (reduceMotion) {
       const frame = requestAnimationFrame(() => {
-        setValues(metrics.map((item) => item.value));
+        setValues(items.map((item) => item.value));
       });
       return () => cancelAnimationFrame(frame);
     }
@@ -64,7 +57,7 @@ export function MetricsStrip() {
       const progress = Math.min((time - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 4);
 
-      setValues(metrics.map((item) => Math.round(item.value * eased)));
+      setValues(items.map((item) => Math.round(item.value * eased)));
 
       if (progress < 1) {
         frame = requestAnimationFrame(tick);
@@ -73,13 +66,17 @@ export function MetricsStrip() {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [active, reduceMotion]);
+  }, [active, items, reduceMotion]);
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section className={layoutStyles.section} aria-label="Kerncijfers">
       <div className={layoutStyles.container}>
         <div className={styles.metrics} ref={ref}>
-          {metrics.map((metric, index) => (
+          {items.map((metric, index) => (
             <div key={metric.label} className={styles.metricItem}>
               <strong>{formatMetric(metric, values[index] ?? 0)}</strong>
               <span>{metric.label}</span>

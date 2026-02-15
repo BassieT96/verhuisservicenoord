@@ -3,61 +3,46 @@
 import { useMemo, useRef, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { ButtonNative } from "@/components/ui/Button";
-import { ReviewItem } from "@/lib/site";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
+import type { CmsReview } from "@/sanity/lib/content";
 
-const reviewItems: ReviewItem[] = [
-  {
-    quote:
-      "Alles liep strak volgens planning. In Leeuwarden was de toegang lastig, maar het team loste dat rustig op.",
-    author: "Familie de Boer",
-    location: "Leeuwarden",
-  },
-  {
-    quote:
-      "Onze kantoorverhuizing in Drachten was in één weekend afgerond. Maandag konden we direct door.",
-    author: "OfficeHub Friesland",
-    location: "Drachten",
-  },
-  {
-    quote:
-      "Bij de seniorenverhuizing van mijn moeder namen ze echt de tijd. Dat gaf veel vertrouwen.",
-    author: "Anita Visser",
-    location: "Heerenveen",
-  },
-  {
-    quote:
-      "Spoedverhuizing in Sneek binnen korte tijd geregeld. Heldere communicatie en nette afwerking.",
-    author: "J. Hoekstra",
-    location: "Sneek",
-  },
-];
+type ReviewsProps = {
+  heading: string;
+  description: string;
+  scoreLabel: string;
+  scoreText: string;
+  items: CmsReview[];
+};
 
-export function Reviews() {
+export function Reviews({ heading, description, scoreLabel, scoreText, items }: ReviewsProps) {
   const [index, setIndex] = useState(0);
   const touchStart = useRef<number | null>(null);
 
-  const max = reviewItems.length;
+  const max = items.length;
   const translate = useMemo(() => `translateX(-${index * 100}%)`, [index]);
-  const activeReview = reviewItems[index];
+  const activeReview = items[index];
 
   const next = () => setIndex((prev) => (prev + 1) % max);
   const prev = () => setIndex((prev) => (prev - 1 + max) % max);
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section className={layoutStyles.section} aria-labelledby="reviews">
       <div className={layoutStyles.container}>
         <div className={styles.sectionHeading}>
-          <h2 id="reviews">Reviews van klanten in Friesland</h2>
-          <p>Ervaringen uit Leeuwarden, Drachten, Sneek, Heerenveen en Harlingen.</p>
+          <h2 id="reviews">{heading}</h2>
+          <p>{description}</p>
         </div>
 
         <div className={styles.reviewWrap}>
           <div className={styles.reviewHeaderBar}>
             <div>
-              <strong>Gemiddeld beoordeeld met 9.4</strong>
-              <span>Gebaseerd op recente verhuizingen in Friesland</span>
+              <strong>{scoreLabel}</strong>
+              <span>{scoreText}</span>
             </div>
             <span className={styles.reviewRating} aria-label="Vijf sterren beoordeling">
               ☆☆☆☆☆
@@ -86,12 +71,12 @@ export function Reviews() {
             aria-label="Review carousel"
           >
             <div className={styles.reviewTrack} style={{ transform: translate }}>
-              {reviewItems.map((review) => (
-                <div key={`${review.author}-${review.location}`} className={styles.reviewSlide}>
+              {items.map((review) => (
+                <div key={`${review.name}-${review.location}`} className={styles.reviewSlide}>
                   <Card>
-                    <p className={styles.reviewQuote}>“{review.quote}”</p>
+                    <p className={styles.reviewQuote}>“{review.text}”</p>
                     <p className={styles.reviewMeta}>
-                      {review.author} · {review.location}
+                      {review.name} · {review.location}
                     </p>
                   </Card>
                 </div>
@@ -107,9 +92,9 @@ export function Reviews() {
               Volgende
             </ButtonNative>
             <div className={styles.reviewDots} aria-hidden="true">
-              {reviewItems.map((review, dotIndex) => (
+              {items.map((review, dotIndex) => (
                 <span
-                  key={`${review.author}-${review.location}-dot`}
+                  key={`${review.name}-${review.location}-dot`}
                   className={`${styles.reviewDot} ${dotIndex === index ? styles.reviewDotActive : ""}`.trim()}
                 />
               ))}
@@ -118,7 +103,7 @@ export function Reviews() {
 
           <div className={styles.reviewFooter}>
             <span>
-              Nu zichtbaar: <strong>{activeReview.author}</strong> uit {activeReview.location}
+              Nu zichtbaar: <strong>{activeReview?.name}</strong> uit {activeReview?.location}
             </span>
           </div>
         </div>

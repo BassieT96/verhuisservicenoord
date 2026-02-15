@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { siteConfig } from "@/lib/site";
+import { getCmsSiteSettings } from "@/sanity/lib/content";
 
 type OffertePayload = Record<string, unknown>;
 
 const TO_EMAIL = "bas.troelstra@live.nl";
+const FALLBACK_PHONE = "0612345678";
 const FORM_SUBMIT_AJAX_ENDPOINT = `https://formsubmit.co/ajax/${TO_EMAIL}`;
 const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/${TO_EMAIL}`;
 
@@ -191,7 +193,11 @@ async function sendViaFormSubmit(data: OffertePayload, origin: string): Promise<
 }
 
 export async function POST(request: Request) {
+  let supportPhone = FALLBACK_PHONE;
+
   try {
+    const settings = await getCmsSiteSettings();
+    supportPhone = settings?.phone || FALLBACK_PHONE;
     const data = (await request.json()) as OffertePayload;
 
     const naam = toStringValue(data.naam);
@@ -228,7 +234,7 @@ export async function POST(request: Request) {
           message:
             formSubmitResult.message ||
             resendResult.message ||
-            "Verzenden is nu niet gelukt. Probeer het opnieuw of bel direct 0612345678.",
+            `Verzenden is nu niet gelukt. Probeer het opnieuw of bel direct ${supportPhone}.`,
         },
         { status: 502 },
       );
@@ -240,7 +246,7 @@ export async function POST(request: Request) {
       {
         ok: false,
         message:
-          "Er ging iets mis bij het verwerken van de aanvraag. Bel direct 0612345678.",
+          `Er ging iets mis bij het verwerken van de aanvraag. Bel direct ${supportPhone}.`,
       },
       { status: 500 },
     );

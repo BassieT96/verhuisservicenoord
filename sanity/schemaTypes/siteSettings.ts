@@ -18,6 +18,12 @@ export const siteSettingsType = defineType({
       validation: (rule) => rule.required().min(8).max(30),
     }),
     defineField({
+      name: 'whatsapp',
+      title: 'WhatsApp nummer',
+      type: 'string',
+      validation: (rule) => rule.required().min(8).max(30),
+    }),
+    defineField({
       name: 'email',
       title: 'E-mailadres',
       type: 'string',
@@ -41,6 +47,33 @@ export const siteSettingsType = defineType({
       type: 'text',
       rows: 3,
       validation: (rule) => rule.required().min(12).max(260),
+    }),
+    defineField({
+      name: 'footerDescription',
+      title: 'Footer beschrijving',
+      type: 'text',
+      rows: 3,
+      validation: (rule) => rule.required().min(20).max(260),
+    }),
+    defineField({
+      name: 'openingHours',
+      title: 'Openingstijden',
+      type: 'string',
+      validation: (rule) => rule.required().min(6).max(80),
+    }),
+    defineField({
+      name: 'trustPoints',
+      title: 'Trust points',
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (rule) => rule.required().min(3).max(4),
+    }),
+    defineField({
+      name: 'serviceAreas',
+      title: 'Werkgebieden',
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (rule) => rule.required().min(3).max(12),
     }),
     defineField({
       name: 'logo',

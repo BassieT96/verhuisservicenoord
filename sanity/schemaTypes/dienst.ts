@@ -31,11 +31,38 @@ export const dienstType = defineType({
       type: 'string',
       validation: (rule) => rule.required().max(60),
     }),
+    defineField({
+      name: 'quick',
+      title: 'Korte highlight',
+      type: 'string',
+      validation: (rule) => rule.required().min(5).max(120),
+    }),
+    defineField({
+      name: 'href',
+      title: 'URL pad',
+      type: 'string',
+      validation: (rule) =>
+        rule.required().custom((value) => (value && value.startsWith('/') ? true : 'Pad moet beginnen met /')),
+    }),
+    defineField({
+      name: 'iconKey',
+      title: 'Icoon',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Bestand', value: 'file' },
+          { title: 'Kantoorgebouw', value: 'building' },
+          { title: 'Klok', value: 'clock' },
+          { title: 'Schild', value: 'shield' },
+        ],
+      },
+      validation: (rule) => rule.required(),
+    }),
   ],
   preview: {
     select: {
       title: 'title',
-      subtitle: 'price',
+      subtitle: 'href',
       media: 'icon',
     },
   },

@@ -1,50 +1,28 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { BuildingIcon, ClockIcon, FileTextIcon } from "@/components/ui/icons";
 import layoutStyles from "@/components/layout/layout.module.css";
 import styles from "@/components/sections/sections.module.css";
+import type { CmsHighlightItem } from "@/sanity/lib/content";
+import { resolveSectionIcon } from "@/components/sections/iconMap";
 
-const highlightItems = [
-  {
-    title: "Particuliere verhuizing",
-    text: "Voor gezinnen en starters met duidelijke planning en vaste verhuiscrew.",
-    bullets: ["Inpakken en montage mogelijk", "Scherpe planning per dagdeel"],
-    href: "/verhuisdiensten",
-    cta: "Bekijk verhuisdiensten",
-    icon: FileTextIcon,
-  },
-  {
-    title: "Zakelijk verhuizen",
-    text: "Kantoorverhuizing met minimale downtime en strakke projectbegeleiding.",
-    bullets: ["Buiten kantooruren mogelijk", "Vaste projectleider"],
-    href: "/zakelijk-verhuizen",
-    cta: "Bekijk zakelijke aanpak",
-    icon: BuildingIcon,
-  },
-  {
-    title: "Spoedverhuizing Friesland",
-    text: "Bij urgente situaties schakelen wij snel, veilig en met heldere communicatie.",
-    bullets: ["Direct telefonisch afgestemd", "Snelle inzet in heel Friesland"],
-    href: "/spoedverhuizing",
-    cta: "Bekijk spoedverhuizing",
-    icon: ClockIcon,
-  },
-] as const;
+type HomeHighlightsProps = {
+  heading: string;
+  description: string;
+  items: CmsHighlightItem[];
+};
 
-export function HomeHighlights() {
+export function HomeHighlights({ heading, description, items }: HomeHighlightsProps) {
   return (
     <section className={layoutStyles.section} aria-labelledby="home-highlights-heading">
       <div className={layoutStyles.container}>
         <div className={styles.sectionHeading}>
-          <h2 id="home-highlights-heading">Kies direct uw verhuisoplossing</h2>
-          <p>
-            Snel schakelen? Hieronder kiest u direct de route die past bij uw situatie in Friesland.
-          </p>
+          <h2 id="home-highlights-heading">{heading}</h2>
+          <p>{description}</p>
         </div>
 
         <div className={styles.highlightGrid}>
-          {highlightItems.map((item) => {
-            const Icon = item.icon;
+          {items.map((item) => {
+            const Icon = resolveSectionIcon(item.iconKey);
             return (
               <Card key={item.title} tilt className={styles.highlightCard}>
                 <span className={styles.iconWrap}>

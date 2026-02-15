@@ -10,7 +10,6 @@ import layoutStyles from "@/components/layout/layout.module.css";
 import sectionStyles from "@/components/sections/sections.module.css";
 import uiStyles from "@/components/ui/ui.module.css";
 import { submitViaFormSubmitBrowser } from "@/lib/formsubmit";
-import { siteConfig } from "@/lib/site";
 
 type ServiceType = "particulier" | "zakelijk" | "senioren" | "spoed";
 type ContactMethod = "telefoon" | "whatsapp" | "email";
@@ -128,7 +127,11 @@ function validate(state: FormState) {
   return errors;
 }
 
-export function ContactQuoteForm() {
+type ContactQuoteFormProps = {
+  phoneDisplay: string;
+};
+
+export function ContactQuoteForm({ phoneDisplay }: ContactQuoteFormProps) {
   const [state, setState] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -189,7 +192,7 @@ export function ContactQuoteForm() {
       const message =
         error instanceof Error
           ? error.message
-          : "Verzenden is niet gelukt. Probeer het opnieuw of bel direct 0612345678.";
+          : `Verzenden is niet gelukt. Probeer het opnieuw of bel direct ${phoneDisplay}.`;
       setSubmitError(message);
       setSubmitted(false);
     } finally {
@@ -225,7 +228,7 @@ export function ContactQuoteForm() {
 
               {submitted ? (
                 <p className={`${sectionStyles.feedback} ${sectionStyles.feedbackSuccess} ${sectionStyles.full}`} role="status">
-                  Bedankt! Uw aanvraag is ontvangen. We nemen snel contact op via uw voorkeur en zijn bereikbaar op {siteConfig.phoneDisplay}.
+                  Bedankt! Uw aanvraag is ontvangen. We nemen snel contact op via uw voorkeur en zijn bereikbaar op {phoneDisplay}.
                 </p>
               ) : null}
 
@@ -557,7 +560,7 @@ export function ContactQuoteForm() {
               <li>Snel contact via telefoon, WhatsApp of e-mail</li>
             </ul>
             <p className={sectionStyles.requestMeta}>Actief in Leeuwarden, Drachten, Sneek, Heerenveen en Harlingen.</p>
-            <p className={sectionStyles.requestMeta}>Liever direct contact? Bel ons op {siteConfig.phoneDisplay}.</p>
+            <p className={sectionStyles.requestMeta}>Liever direct contact? Bel ons op {phoneDisplay}.</p>
           </Card>
         </div>
       </div>

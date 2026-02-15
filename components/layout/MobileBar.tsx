@@ -1,12 +1,16 @@
 import { ButtonExternal, ButtonLink } from "@/components/ui/Button";
 import { FileTextIcon, MessageCircleIcon, PhoneIcon } from "@/components/ui/icons";
 import styles from "@/components/layout/layout.module.css";
-import { siteConfig } from "@/lib/site";
 
-export function MobileBar() {
+type MobileBarProps = {
+  phoneHref: string;
+  whatsappHref: string;
+};
+
+export function MobileBar({ phoneHref, whatsappHref }: MobileBarProps) {
   return (
     <div className={styles.mobileBar} aria-label="Snelle acties mobiel">
-      <ButtonExternal href={siteConfig.phoneHref} variant="secondary" dataTrackEvent="mobile_bar_click" dataTrackLabel="bel">
+      <ButtonExternal href={phoneHref} variant="secondary" dataTrackEvent="mobile_bar_click" dataTrackLabel="bel">
         <PhoneIcon width={18} height={18} />
         Bel
       </ButtonExternal>
@@ -15,7 +19,7 @@ export function MobileBar() {
         Offerte
       </ButtonLink>
       <ButtonExternal
-        href={siteConfig.whatsappHref}
+        href={whatsappHref}
         target="_blank"
         rel="noreferrer"
         variant="secondary"

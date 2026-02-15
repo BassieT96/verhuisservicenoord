@@ -9,7 +9,6 @@ import uiStyles from "@/components/ui/ui.module.css";
 import sectionStyles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
 import { submitViaFormSubmitBrowser } from "@/lib/formsubmit";
-import { siteConfig } from "@/lib/site";
 
 type ServiceType = "particulier" | "zakelijk" | "senior" | "spoed";
 
@@ -52,7 +51,11 @@ function validate(data: FormState) {
   return errors;
 }
 
-export function QuoteForm() {
+type QuoteFormProps = {
+  phoneDisplay: string;
+};
+
+export function QuoteForm({ phoneDisplay }: QuoteFormProps) {
   const [state, setState] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -113,7 +116,7 @@ export function QuoteForm() {
       const message =
         error instanceof Error
           ? error.message
-          : "Verzenden is niet gelukt. Probeer het opnieuw of bel direct 0612345678.";
+          : `Verzenden is niet gelukt. Probeer het opnieuw of bel direct ${phoneDisplay}.`;
       setSubmitError(message);
       setSubmitted(false);
     } finally {
@@ -148,7 +151,7 @@ export function QuoteForm() {
 
             {submitted ? (
               <p className={`${sectionStyles.feedback} ${sectionStyles.feedbackSuccess} ${sectionStyles.full}`} role="status">
-                Bedankt! Uw aanvraag is ontvangen. We bellen u snel terug op {siteConfig.phoneDisplay}.
+                Bedankt! Uw aanvraag is ontvangen. We bellen u snel terug op {phoneDisplay}.
               </p>
             ) : null}
 

@@ -1,9 +1,17 @@
 import { Card } from "@/components/ui/Card";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
-import { serviceAreas, siteConfig } from "@/lib/site";
+type ContactCardProps = {
+  companyName: string;
+  address: string;
+  phoneHref: string;
+  phoneDisplay: string;
+  email: string;
+  serviceAreas: string[];
+  openingHours: string;
+};
 
-export function ContactCard() {
+export function ContactCard({ companyName, address, phoneHref, phoneDisplay, email, serviceAreas, openingHours }: ContactCardProps) {
   return (
     <section className={layoutStyles.section} aria-labelledby="contact-info">
       <div className={layoutStyles.container}>
@@ -11,18 +19,16 @@ export function ContactCard() {
           <div className={styles.sectionHeading}>
             <h2 id="contact-info">Direct contact</h2>
           </div>
-          <p>{siteConfig.legalName}</p>
+          <p>{companyName}</p>
+          <p>{address}</p>
           <p>
-            {siteConfig.address.street}, {siteConfig.address.postalCode} {siteConfig.address.city}
+            Telefoon: <a href={phoneHref}>{phoneDisplay}</a>
           </p>
           <p>
-            Telefoon: <a href={siteConfig.phoneHref}>{siteConfig.phoneDisplay}</a>
-          </p>
-          <p>
-            E-mail: <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+            E-mail: <a href={`mailto:${email}`}>{email}</a>
           </p>
           <p>Werkgebied: {serviceAreas.join(", ")} en de rest van Friesland.</p>
-          <p>Openingstijden: {siteConfig.openingHours}</p>
+          <p>Openingstijden: {openingHours}</p>
         </Card>
       </div>
     </section>

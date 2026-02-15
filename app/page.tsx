@@ -10,7 +10,8 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { LocalProof } from "@/components/sections/LocalProof";
 import { JsonLd } from "@/components/layout/JsonLd";
 import { createPageMetadata, getFaqJsonLd, getServiceJsonLd } from "@/lib/seo";
-import type { FaqItem } from "@/lib/site";
+import { formatPhoneHref, formatWhatsappHref, getCmsDiensten, getCmsHomePage, getCmsReviews, getCmsSiteSettings } from "@/sanity/lib/content";
+import { SanityEmptyState } from "@/components/sections/SanityEmptyState";
 
 const Steps = dynamic(() => import("@/components/sections/Steps").then((mod) => mod.Steps));
 const AreaSwitcher = dynamic(() => import("@/components/sections/AreaSwitcher").then((mod) => mod.AreaSwitcher));
@@ -20,58 +21,97 @@ const ContactQuoteForm = dynamic(() =>
   import("@/components/sections/ContactQuoteForm").then((mod) => mod.ContactQuoteForm),
 );
 
-export const metadata = createPageMetadata({
-  title: "Verhuisbedrijf Friesland voor een zorgeloze verhuisdag",
-  description:
-    "Verhuisservice Noord verhuist particulieren en bedrijven in Friesland. Actief in Leeuwarden, Drachten, Sneek, Heerenveen en Harlingen.",
-  path: "/",
-});
+export async function generateMetadata() {
+  const home = await getCmsHomePage();
+  if (!home) {
+    return createPageMetadata({
+      title: "Homepage",
+      description: "Vul homepage-content in Sanity.",
+      path: "/",
+    });
+  }
 
-const faqItems: FaqItem[] = [
-  {
-    question: "Wat kost een verhuizing in Friesland?",
-    answer:
-      "Dat hangt af van volume, afstand, bereikbaarheid en extra hulp zoals inpakken. U ontvangt altijd vooraf een transparante offerte.",
-  },
-  {
-    question: "Doen jullie ook spoedverhuizingen?",
-    answer:
-      "Ja, we kunnen vaak snel schakelen. Bel direct zodat we beschikbaarheid en planning meteen kunnen afstemmen.",
-  },
-  {
-    question: "In welke steden zijn jullie actief?",
-    answer:
-      "Wij verhuizen in heel Friesland, met focus op Leeuwarden, Drachten, Sneek, Heerenveen en Harlingen.",
-  },
-  {
-    question: "Hoe snel kan mijn verhuizing ingepland worden?",
-    answer:
-      "In veel gevallen plannen wij binnen enkele werkdagen. Voor spoedverhuizingen kunnen we vaak dezelfde dag schakelen.",
-  },
-];
+  return createPageMetadata({
+    title: home.title,
+    description: home.description,
+    path: "/",
+  });
+}
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [home, settings, reviews, diensten] = await Promise.all([
+    getCmsHomePage(),
+    getCmsSiteSettings(),
+    getCmsReviews(),
+    getCmsDiensten(),
+  ]);
+
+  if (!home || !settings) {
+    return <SanityEmptyState pageName="Homepage" />;
+  }
+
+  const phoneHref = formatPhoneHref(settings.phone);
+  const whatsappHref = formatWhatsappHref(settings.whatsapp);
+
   return (
     <>
-      <Hero />
-      <MovingGallery />
-      <HomeHighlights />
-      <ContactQuoteForm />
-      <MetricsStrip />
-      <Benefits />
-      <LocalProof
-        title="Waarom Friesland voor ons voelt als thuisterrein"
-        text="Onze teams rijden dagelijks door de provincie. Daardoor plannen we realistischer en verhuizen we met meer rust."
+      <Hero
+        eyebrow={home.heroEyebrow}
+        title={home.heroTitle}
+        subtitle={home.heroSubtitle}
+        phoneHref={phoneHref}
+        whatsappHref={whatsappHref}
+        trustPoints={settings.trustPoints}
+        routeStartLabel={home.routeStartLabel}
+        routeEndLabel={home.routeEndLabel}
+        routeBoxOneLabel={home.routeBoxOneLabel}
+        routeBoxTwoLabel={home.routeBoxTwoLabel}
+        routeStatOneValue={home.routeStatOneValue}
+        routeStatOneLabel={home.routeStatOneLabel}
+        routeStatTwoValue={home.routeStatTwoValue}
+        routeStatTwoLabel={home.routeStatTwoLabel}
       />
-      <Steps />
-      <Services />
-      <MovingPhotoShowcase />
-      <AreaSwitcher />
-      <Reviews />
-      <Faq title="Veelgestelde vragen over verhuizen in Friesland" items={faqItems} />
+      <MovingGallery title={home.movingGalleryTitle} description={home.movingGalleryDescription} items={home.movingGalleryItems} />
+      <HomeHighlights heading={home.highlightsTitle} description={home.highlightsDescription} items={home.highlights} />
+      <ContactQuoteForm phoneDisplay={settings.phone} />
+      <MetricsStrip items={home.metrics} />
+      <Benefits heading={home.benefitsTitle} description={home.benefitsDescription} items={home.benefits} />
+      <LocalProof
+        title={home.localProofTitle}
+        text={home.localProofText}
+      />
+      <Steps heading={home.stepsTitle} description={home.stepsDescription} items={home.steps} />
+      <Services
+        heading={home.servicesTitle}
+        description={home.servicesDescription}
+        quickFallback={home.servicesQuickFallback}
+        items={
+          diensten.length > 0
+            ? diensten.map((item) => ({
+                title: item.title,
+                text: item.description,
+                quick: item.quick,
+                href: item.href,
+                iconKey: item.iconKey,
+              }))
+            : home.serviceCards
+        }
+      />
+      <MovingPhotoShowcase title={home.showcaseTitle} description={home.showcaseDescription} items={home.showcaseItems} />
+      <AreaSwitcher heading={home.areasTitle} description={home.areasDescription} areas={home.areas} />
+      <Reviews
+        heading={home.reviewsTitle}
+        description={home.reviewsDescription}
+        scoreLabel={home.reviewsScoreLabel}
+        scoreText={home.reviewsScoreText}
+        items={reviews}
+      />
+      <Faq title={home.faqTitle} items={home.faqItems} />
       <CtaBand
-        title="Klaar om uw verhuizing in te plannen?"
-        text="Ontvang snel een heldere prijsopgave en plan uw verhuisdag met een ervaren team uit Friesland."
+        title={home.ctaTitle}
+        text={home.ctaText}
+        phoneHref={phoneHref}
+        whatsappHref={whatsappHref}
       />
 
       <JsonLd
@@ -84,7 +124,7 @@ export default function HomePage() {
           })
         }
       />
-      <JsonLd data={getFaqJsonLd(faqItems)} />
+      <JsonLd data={getFaqJsonLd(home.faqItems)} />
     </>
   );
 }

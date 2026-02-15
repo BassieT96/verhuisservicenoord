@@ -3,60 +3,34 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Card } from "@/components/ui/Card";
-import { BuildingIcon, ClockIcon, FileTextIcon, ShieldIcon } from "@/components/ui/icons";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
+import type { CmsServiceCardItem } from "@/sanity/lib/content";
+import { resolveSectionIcon } from "@/components/sections/iconMap";
 
-const services = [
-  {
-    title: "Verhuisdiensten",
-    text: "Complete particuliere verhuizingen inclusief inpakservice, transport en montage.",
-    quick: "Snel ingepland in heel Friesland.",
-    href: "/verhuisdiensten",
-    icon: FileTextIcon,
-  },
-  {
-    title: "Zakelijk verhuizen",
-    text: "Kantoorverhuizingen met minimale downtime en één vast aanspreekpunt.",
-    quick: "Ook in weekend of avond mogelijk.",
-    href: "/zakelijk-verhuizen",
-    icon: BuildingIcon,
-  },
-  {
-    title: "Seniorenverhuizing",
-    text: "Rustige begeleiding voor senioren en familie, stap voor stap en zonder haast.",
-    quick: "Persoonlijk en zorgvuldig uitgevoerd.",
-    href: "/seniorenverhuizing",
-    icon: ShieldIcon,
-  },
-  {
-    title: "Spoedverhuizing",
-    text: "Bij onverwachte situaties schakelen wij snel met een flexibel verhuisteam.",
-    quick: "Direct telefonisch afgestemd.",
-    href: "/spoedverhuizing",
-    icon: ClockIcon,
-  },
-] as const;
+type ServicesProps = {
+  heading: string;
+  description: string;
+  quickFallback: string;
+  items: CmsServiceCardItem[];
+};
 
-export function Services() {
+export function Services({ heading, description, quickFallback, items }: ServicesProps) {
   const [active, setActive] = useState<string | null>(null);
 
   return (
     <section className={layoutStyles.section} aria-labelledby="diensten">
       <div className={layoutStyles.container}>
         <div className={styles.sectionHeading}>
-          <h2 id="diensten">Diensten in Friesland</h2>
-          <p>
-            Kies de dienst die past bij uw situatie. Op desktop ziet u extra details door te hoveren,
-            op mobiel door te tikken.
-          </p>
+          <h2 id="diensten">{heading}</h2>
+          <p>{description}</p>
         </div>
 
         <div className={styles.serviceGrid}>
-          {services.map((service) => {
-            const Icon = service.icon;
+          {items.map((service) => {
+            const Icon = resolveSectionIcon(service.iconKey);
             const isActive = active === service.title;
-            const quickText = isActive ? service.quick : "Snel inzicht in planning en aanpak.";
+            const quickText = isActive ? service.quick : quickFallback;
             return (
               <div
                 key={service.title}

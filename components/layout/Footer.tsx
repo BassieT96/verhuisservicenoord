@@ -1,29 +1,31 @@
 import Link from "next/link";
 import styles from "@/components/layout/layout.module.css";
-import { serviceAreas, siteConfig } from "@/lib/site";
+type FooterProps = {
+  companyName: string;
+  description: string;
+  address: string;
+  phoneHref: string;
+  phoneDisplay: string;
+  email: string;
+  serviceAreas: string[];
+};
 
-export function Footer() {
+export function Footer({ companyName, description, address, phoneHref, phoneDisplay, email, serviceAreas }: FooterProps) {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.footerGrid}>
           <section>
-            <h2>Verhuisservice Noord</h2>
-            <p>
-              Betrouwbaar verhuisbedrijf in Friesland voor particulieren, bedrijven, senioren en
-              spoedverhuizingen.
-            </p>
+            <h2>{companyName}</h2>
+            <p>{description}</p>
             <address className={styles.address}>
-              <p>{siteConfig.legalName}</p>
-              <p>{siteConfig.address.street}</p>
+              <p>{companyName}</p>
+              <p>{address}</p>
               <p>
-                {siteConfig.address.postalCode} {siteConfig.address.city}
+                <a href={phoneHref}>{phoneDisplay}</a>
               </p>
               <p>
-                <a href={siteConfig.phoneHref}>{siteConfig.phoneDisplay}</a>
-              </p>
-              <p>
-                <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+                <a href={`mailto:${email}`}>{email}</a>
               </p>
             </address>
           </section>
@@ -60,7 +62,7 @@ export function Footer() {
         </div>
 
         <div className={styles.footerBottom}>
-          <p>© {new Date().getFullYear()} Verhuisservice Noord. Alle rechten voorbehouden.</p>
+          <p>© {new Date().getFullYear()} {companyName}. Alle rechten voorbehouden.</p>
         </div>
       </div>
     </footer>

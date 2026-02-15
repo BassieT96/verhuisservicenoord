@@ -18,6 +18,12 @@ export const reviewType = defineType({
       validation: (rule) => rule.required().min(1).max(5).precision(1),
     }),
     defineField({
+      name: 'location',
+      title: 'Plaats',
+      type: 'string',
+      validation: (rule) => rule.required().min(2).max(80),
+    }),
+    defineField({
       name: 'text',
       title: 'Reviewtekst',
       type: 'text',
@@ -28,13 +34,12 @@ export const reviewType = defineType({
   preview: {
     select: {
       title: 'name',
-      subtitle: 'rating',
+      subtitle: 'location',
     },
     prepare(selection) {
-      const rating = typeof selection.subtitle === 'number' ? selection.subtitle : undefined
       return {
         title: selection.title || 'Onbekende klant',
-        subtitle: rating ? `${rating}/5 sterren` : 'Geen beoordeling',
+        subtitle: selection.subtitle || 'Geen plaats',
       }
     },
   },

@@ -1,18 +1,43 @@
 import { ButtonExternal, ButtonLink } from "@/components/ui/Button";
 import { BoxIcon, FileTextIcon, MessageCircleIcon, PhoneIcon, RouteIcon, ShieldIcon, TruckIcon } from "@/components/ui/icons";
-import { siteConfig } from "@/lib/site";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
 
 type HeroProps = {
-  title?: string;
-  subtitle?: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  phoneHref: string;
+  whatsappHref: string;
+  trustPoints: string[];
+  routeStartLabel: string;
+  routeEndLabel: string;
+  routeBoxOneLabel: string;
+  routeBoxTwoLabel: string;
+  routeStatOneValue: string;
+  routeStatOneLabel: string;
+  routeStatTwoValue: string;
+  routeStatTwoLabel: string;
 };
 
-export function Hero({
-  title = "Verhuizen in Friesland, zonder stress.",
-  subtitle = "Van Leeuwarden tot Harlingen: wij regelen uw verhuizing zorgvuldig, snel en met heldere afspraken. Zo houdt u rust op de verhuisdag.",
-}: HeroProps) {
+export function Hero(props: HeroProps) {
+  const {
+    eyebrow,
+    title,
+    subtitle,
+    phoneHref,
+    whatsappHref,
+    trustPoints,
+    routeStartLabel,
+    routeEndLabel,
+    routeBoxOneLabel,
+    routeBoxTwoLabel,
+    routeStatOneValue,
+    routeStatOneLabel,
+    routeStatTwoValue,
+    routeStatTwoLabel,
+  } = props;
+
   return (
     <section className={styles.hero} aria-label="Hero Verhuisservice Noord">
       <div className={`${styles.aurora} ${styles.auroraOne}`} aria-hidden="true" />
@@ -21,7 +46,7 @@ export function Hero({
       <div className={layoutStyles.container}>
         <div className={styles.heroGrid}>
           <div className={styles.heroCopy}>
-            <p className={styles.heroEyebrow}>Verhuisservice Noord · Friesland</p>
+            <p className={styles.heroEyebrow}>{eyebrow}</p>
             <h1>{title}</h1>
             <p className={styles.heroSub}>{subtitle}</p>
 
@@ -31,7 +56,7 @@ export function Hero({
                 Vrijblijvende offerte
               </ButtonLink>
               <ButtonExternal
-                href={siteConfig.phoneHref}
+                href={phoneHref}
                 variant="secondary"
                 dataTrackEvent="hero_click"
                 dataTrackLabel="bel_direct"
@@ -41,7 +66,7 @@ export function Hero({
                 Bel direct
               </ButtonExternal>
               <ButtonExternal
-                href={siteConfig.whatsappHref}
+                href={whatsappHref}
                 target="_blank"
                 rel="noreferrer"
                 variant="secondary"
@@ -56,7 +81,7 @@ export function Hero({
             </div>
 
             <div className={styles.heroTrust}>
-              {siteConfig.trustPoints.map((point) => (
+              {trustPoints.map((point) => (
                 <span key={point}>
                   <ShieldIcon width={16} height={16} />
                   {point}
@@ -68,8 +93,8 @@ export function Hero({
           <div className={styles.heroVisual}>
             <div className={styles.routeGraphic}>
               <div className={styles.routeTop}>
-                <span>Ophalen</span>
-                <span>Opleveren</span>
+                <span>{routeStartLabel}</span>
+                <span>{routeEndLabel}</span>
               </div>
               <div className={styles.routeBackdrop} aria-hidden="true" />
               <div className={styles.routeLine} />
@@ -90,20 +115,20 @@ export function Hero({
               </span>
               <div className={`${styles.routeBox} ${styles.routeBoxOne}`}>
                 <BoxIcon width={18} height={18} />
-                Inpakken
+                {routeBoxOneLabel}
               </div>
               <div className={`${styles.routeBox} ${styles.routeBoxTwo}`}>
                 <RouteIcon width={18} height={18} />
-                Opleveren
+                {routeBoxTwoLabel}
               </div>
               <div className={styles.routeStats}>
                 <div>
-                  <strong>15+</strong>
-                  <span>Jaar ervaring</span>
+                  <strong>{routeStatOneValue}</strong>
+                  <span>{routeStatOneLabel}</span>
                 </div>
                 <div>
-                  <strong>9.4</strong>
-                  <span>Klantscore</span>
+                  <strong>{routeStatTwoValue}</strong>
+                  <span>{routeStatTwoLabel}</span>
                 </div>
               </div>
             </div>

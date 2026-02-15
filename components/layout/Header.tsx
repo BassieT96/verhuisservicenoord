@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { ButtonExternal, ButtonLink } from "@/components/ui/Button";
 import { PhoneIcon } from "@/components/ui/icons";
 import styles from "@/components/layout/layout.module.css";
-import { siteConfig } from "@/lib/site";
 
 const serviceMenuItems = [
   { href: "/verhuisdiensten", label: "Alle diensten" },
@@ -22,7 +21,12 @@ const headerNavigation = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
-export function Header() {
+type HeaderProps = {
+  companyName: string;
+  phoneHref: string;
+};
+
+export function Header({ companyName, phoneHref }: HeaderProps) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,7 +60,7 @@ export function Header() {
         <Link href="/" className={styles.brand} aria-label="Ga naar homepage">
           <span className={styles.brandLine}>
             <span className={styles.brandDot} aria-hidden="true" />
-            {siteConfig.name}
+            {companyName}
           </span>
         </Link>
 
@@ -89,7 +93,7 @@ export function Header() {
 
         <div className={styles.actions}>
           <ButtonExternal
-            href={siteConfig.phoneHref}
+            href={phoneHref}
             variant="secondary"
             className={`${styles.headerAction} ${styles.headerActionSecondary}`}
             dataTrackEvent="header_click"
@@ -172,7 +176,7 @@ export function Header() {
         </nav>
 
         <div className={styles.mobileMenuActions}>
-          <ButtonExternal href={siteConfig.phoneHref} variant="secondary" dataTrackEvent="header_click" dataTrackLabel="bel_direct" dataTrackLocation="mobile_menu">
+          <ButtonExternal href={phoneHref} variant="secondary" dataTrackEvent="header_click" dataTrackLabel="bel_direct" dataTrackLocation="mobile_menu">
             <PhoneIcon width={18} height={18} />
             Bel direct
           </ButtonExternal>

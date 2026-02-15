@@ -51,18 +51,43 @@ export function createPageMetadata({ title, description, path }: PageMetaInput):
 }
 
 export function getLocalBusinessJsonLd() {
+  return getLocalBusinessJsonLdWithOverrides();
+}
+
+type LocalBusinessOverrides = {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  areaServed?: string[];
+};
+
+function normalizePhone(phone: string) {
+  const cleaned = phone.replace(/\s+/g, "");
+  if (cleaned.startsWith("+")) return cleaned;
+  if (cleaned.startsWith("0")) return `+31${cleaned.slice(1)}`;
+  return cleaned;
+}
+
+export function getLocalBusinessJsonLdWithOverrides(overrides?: LocalBusinessOverrides) {
+  const companyName = overrides?.name || siteConfig.legalName;
+  const companyPhone = overrides?.phone ? normalizePhone(overrides.phone) : siteConfig.phonePlain;
+  const companyEmail = overrides?.email || siteConfig.email;
+  const streetAddress = overrides?.address || siteConfig.address.street;
+  const areas = overrides?.areaServed && overrides.areaServed.length > 0 ? overrides.areaServed : [...serviceAreas];
+
   return {
     "@context": "https://schema.org",
     "@type": "MovingCompany",
     "@id": `${siteConfig.url}#company`,
-    name: siteConfig.legalName,
+    name: companyName,
     url: siteConfig.url,
-    telephone: siteConfig.phonePlain,
-    email: siteConfig.email,
-    areaServed: serviceAreas,
+    telephone: companyPhone,
+    email: companyEmail,
+    areaServed: areas,
     address: {
       "@type": "PostalAddress",
-      streetAddress: siteConfig.address.street,
+      streetAddress,
       postalCode: siteConfig.address.postalCode,
       addressLocality: siteConfig.address.city,
       addressCountry: siteConfig.address.country,

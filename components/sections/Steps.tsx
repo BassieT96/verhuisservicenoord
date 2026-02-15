@@ -2,35 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/Card";
-import { FileTextIcon, RouteIcon, ShieldIcon } from "@/components/ui/icons";
 import styles from "@/components/sections/sections.module.css";
 import layoutStyles from "@/components/layout/layout.module.css";
+import { renderSectionIcon } from "@/components/sections/iconMap";
+import type { CmsStepItem } from "@/sanity/lib/content";
 
-const steps = [
-  {
-    id: "intake",
-    title: "Intake & inventarisatie",
-    detail:
-      "We brengen uw wensen in kaart: volume, route, toegang en gewenste datum. U krijgt direct helder advies over de slimste aanpak.",
-    icon: FileTextIcon,
-  },
-  {
-    id: "planning",
-    title: "Planning & voorbereiding",
-    detail:
-      "U ontvangt een duidelijke offerte en planning. Wij stemmen af welke materialen, voertuigen en extra hulp nodig zijn.",
-    icon: RouteIcon,
-  },
-  {
-    id: "uitvoering",
-    title: "Verhuisdag & oplevering",
-    detail:
-      "Ons team verhuist zorgvuldig, zet alles op de juiste plek en loopt de oplevering samen met u na. Zo rondt u de dag zonder losse eindjes af.",
-    icon: ShieldIcon,
-  },
-] as const;
+type StepsProps = {
+  heading: string;
+  description: string;
+  items: CmsStepItem[];
+};
 
-export function Steps() {
+export function Steps({ heading, description, items }: StepsProps) {
   const [active, setActive] = useState(0);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -54,19 +37,19 @@ export function Steps() {
     return () => observer.disconnect();
   }, []);
 
-  const ActiveIcon = steps[active].icon;
+  const activeIconKey = items[active]?.iconKey ?? "file";
 
   return (
     <section className={layoutStyles.section} aria-labelledby="werkwijze">
       <div className={layoutStyles.container}>
         <div className={styles.sectionHeading}>
-          <h2 id="werkwijze">Werkwijze in 3 stappen</h2>
-          <p>Van eerste belletje tot laatste doos: u weet precies waar u aan toe bent.</p>
+          <h2 id="werkwijze">{heading}</h2>
+          <p>{description}</p>
         </div>
 
         <div className={styles.stepsLayout}>
           <div className={styles.stepList}>
-            {steps.map((step, index) => (
+            {items.map((step, index) => (
               <button
                 key={step.id}
                 type="button"
@@ -87,10 +70,10 @@ export function Steps() {
           <div className={styles.stepDetail}>
             <Card>
               <span className={styles.iconWrap}>
-                <ActiveIcon width={20} height={20} />
+                {renderSectionIcon(activeIconKey, 20, 20)}
               </span>
-              <h3>{steps[active].title}</h3>
-              <p>{steps[active].detail}</p>
+              <h3>{items[active]?.title}</h3>
+              <p>{items[active]?.detail}</p>
             </Card>
           </div>
         </div>

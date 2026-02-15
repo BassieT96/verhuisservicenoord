@@ -6,8 +6,9 @@ import { Header } from "@/components/layout/Header";
 import { JsonLd } from "@/components/layout/JsonLd";
 import { MobileBar } from "@/components/layout/MobileBar";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import { getLocalBusinessJsonLd } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import { getLocalBusinessJsonLdWithOverrides } from "@/lib/seo";
+import { serviceAreas as defaultServiceAreas, siteConfig } from "@/lib/site";
+import { formatPhoneHref, formatWhatsappHref, getCmsSiteSettings } from "@/sanity/lib/content";
 import "./globals.css";
 
 const mainFont = localFont({
@@ -66,19 +67,47 @@ export const viewport: Viewport = {
   themeColor: "#0B1220",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const settings = await getCmsSiteSettings();
+  const companyName = settings?.companyName || siteConfig.name;
+  const phoneDisplay = settings?.phone || siteConfig.phoneDisplay;
+  const phoneHref = settings?.phone ? formatPhoneHref(settings.phone) : siteConfig.phoneHref;
+  const whatsappHref = settings?.whatsapp ? formatWhatsappHref(settings.whatsapp) : siteConfig.whatsappHref;
+  const footerDescription = settings?.footerDescription || siteConfig.description;
+  const email = settings?.email || siteConfig.email;
+  const address = settings?.address || `${siteConfig.address.street}, ${siteConfig.address.postalCode} ${siteConfig.address.city}`;
+  const serviceAreas = settings?.serviceAreas?.length ? settings.serviceAreas : [...defaultServiceAreas];
+
   return (
     <html lang="nl">
       <body className={mainFont.variable}>
         <a href="#main-content" className="skip-link">
           Ga naar hoofdinhoud
         </a>
-        <Header />
+        <Header companyName={companyName} phoneHref={phoneHref} />
         <ScrollProgress />
         <main id="main-content">{children}</main>
-        <Footer />
-        <MobileBar />
-        <JsonLd data={getLocalBusinessJsonLd()} />
+        <Footer
+          companyName={companyName}
+          description={footerDescription}
+          address={address}
+          phoneHref={phoneHref}
+          phoneDisplay={phoneDisplay}
+          email={email}
+          serviceAreas={serviceAreas}
+        />
+        <MobileBar phoneHref={phoneHref} whatsappHref={whatsappHref} />
+        <JsonLd
+          data={
+            getLocalBusinessJsonLdWithOverrides({
+              name: companyName,
+              phone: phoneDisplay,
+              email,
+              address,
+              areaServed: serviceAreas,
+            })
+          }
+        />
         <AnalyticsTracker />
       </body>
     </html>
